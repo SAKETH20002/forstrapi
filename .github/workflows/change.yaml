@@ -24,11 +24,11 @@ jobs:
 
       - name: SSH and Deploy
         run: |
-          ssh -i private_key ${USER_NAME}@${{ steps.read_ip.outputs.INSTANCE_IP }} '
-          cd /srv/strapi/forstrapi/row
-          sudo git pull origin master
-          sudo yarn install
-          sudo pm2 restart saketh
+          ssh -i private_key ${USER_NAME}@${{ INSTANCE_IP }} '
+           cd /srv/strapi/forstrapi/row
+           sudo git pull origin master
+           sudo yarn install
+           sudo pm2 restart saketh
           '
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
