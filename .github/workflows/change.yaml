@@ -21,7 +21,7 @@ jobs:
 
       - name: Set up SSH key
         run: |
-          echo "$PRIVATE_KEY" > private_key
+          echo "${{ env.PRIVATE_KEY }}" > private_key
           chmod 600 private_key
 
       - name: SSH and Deploy
