@@ -2,6 +2,10 @@ name: Terraform
 
 on:
   workflow_dispatch:
+   inputs:
+      destroy:
+        required: true
+        type: string
   
 jobs:
   terraform:
