@@ -24,7 +24,7 @@ jobs:
 
       - name: SSH and Deploy
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${{ steps.read_ip.outputs.INSTANCE_IP }} '
+          ssh -i private_key ${USER_NAME}@${{ steps.read_ip.outputs.INSTANCE_IP }} '
           cd /srv/strapi/forstrapi/row
           sudo git pull origin master
           sudo yarn install
