@@ -6,31 +6,28 @@ on:
       - master
 
 jobs:
-  deploy:
-    name: Deploy via SSH
+  Deploy:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
-
-    env:
-      INSTANCE_IP: "100.26.55.160"
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
+      - uses: actions/checkout@v2 
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: ${{secrets.SSH_HOST}}
+            USER_NAME: ${{secrets.USER_NAME}}
       
-
-      - name: Run commands on EC2 instance
         run: |
-          ssh -o StrictHostKeyChecking=no -o ForwardAgent=yes ***@100.26.55.160 << 'EOF'
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} >>"EOF"
           cd /srv/strapi/forstrapi/row
           sudo git pull origin master
           sudo yarn install
           sudo pm2 restart saketh
           EOF
+
+      
+
+      
+          
