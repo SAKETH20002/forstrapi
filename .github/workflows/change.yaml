@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      INSTANCE_IP: ${{ needs.terraform.outputs.instance_ip}}
+      INSTANCE_IP: "100.26.55.160"
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
 
