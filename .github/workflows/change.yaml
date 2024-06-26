@@ -29,7 +29,7 @@ jobs:
 
       - name: Run commands on EC2 instance
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ env.SSH_USERNAME }}@${{ env.INSTANCE_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -o ForwardAgent=yes ***@100.26.55.160 << 'EOF'
           cd /srv/strapi/forstrapi/row
           sudo git pull origin master
           sudo yarn install
