@@ -18,7 +18,7 @@ resource "aws_instance" "strapi" {
                                 cd forstrapi/
                                 cd row/
                                 sudo yarn install
-                                sudo pm2 start yarn --name "s" -- start
+                                sudo pm2 start yarn --name "saketh" -- start
                                 sleep 360
                                 EOF
 
