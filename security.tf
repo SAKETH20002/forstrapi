@@ -1,5 +1,5 @@
 resource "aws_security_group" "strapi_sg" {
-  name        = "ec2-SG-stap"
+  name        = "terraform-SG"
   description = "Strapi"
 
   vpc_id = "vpc-028e6aa2ad524bbab" # Replace with your VPC ID
