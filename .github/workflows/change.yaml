@@ -8,27 +8,27 @@ on:
 
 jobs:
   deploy:
-    name: "Deploy Strapi"
-    runs-on: self-hosted
+    name: Deploy Strapi via SSH
+    runs-on: ubuntu-latest
+    env:
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      USER_NAME: ${{ secrets.USER_NAME }}
+      INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup SSH
+      - name: Set up SSH key
         run: |
           echo "$PRIVATE_KEY" > private_key
           chmod 600 private_key
 
       - name: SSH and Deploy
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${INSTANCE_IP} '
-          cd /srv/strapi/forstrapi/row
-          sudo git pull origin master
-          sudo yarn install
-          sudo pm2 restart saketh
-          '
-        env:
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          USER_NAME: ${{ secrets.USER_NAME }}
-          INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ env.USER_NAME }}@${{ env.INSTANCE_IP }} << 'EOF'
+            cd /srv/strapi/forstrapi/row
+            sudo git pull origin master
+            sudo yarn install
+            sudo pm2 restart saketh
+          EOF
