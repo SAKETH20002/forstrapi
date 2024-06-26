@@ -31,7 +31,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ env.SSH_USERNAME }}@${{ env.INSTANCE_IP }} << 'EOF'
           cd /srv/strapi/forstrapi/row
-          git pull origin master
-          yarn install
-          pm2 restart saketh
+          sudo git pull origin master
+          sudo yarn install
+          sudo pm2 restart saketh
           EOF
