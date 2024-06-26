@@ -4,11 +4,10 @@ on:
   push:
     branches: [ "master" ]
   
-
 env:
- PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
- USER_NAME: ${{ secrets.USER_NAME }}
- INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
+  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  USER_NAME: ${{ secrets.USER_NAME }}
+  INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
   
 permissions:
   contents: read
@@ -21,21 +20,27 @@ jobs:
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
+
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/github-actions-key
+          echo "$PRIVATE_KEY" > ~/.ssh/github-actions-key
           chmod 600 ~/.ssh/github-actions-key
           cat >>~/.ssh/config <<END
           Host ec2
-            HostName $SSH_HOST
-            User $SSH_USER
+            HostName $INSTANCE_IP
+            User $USER_NAME
             IdentityFile ~/.ssh/github-actions-key
             StrictHostKeyChecking no
           END
         env:
-          SSH_HOST: ${{ env.INSTANCE_IP }}
-          SSH_USER: ${{ env.USER_NAME }}
-          SSH_KEY: ${{ secrets.PRIVATE_KEY }} 
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          USER_NAME: ${{ secrets.USER_NAME }}
+          INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
+          
       - name: List home directory
         run: ssh ec2 'ls -la'
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          USER_NAME: ${{ secrets.USER_NAME }}
+          INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
