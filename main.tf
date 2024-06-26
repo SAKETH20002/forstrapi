@@ -8,20 +8,21 @@ resource "aws_instance" "strapi" {
   user_data                   = <<-EOF
                                 #!/bin/bash
                                 sudo apt update
-                                curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
-                                sudo bash -E nodesource_setup.sh
-                                sudo apt update && sudo apt install nodejs -y
+                                sudo mkdir -p /srv/strapi
+                                sudo chown ubuntu:ubuntu /srv/strapi
+                                cd /srv/strapi
+                                curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+                                sudo apt install -y nodejs
                                 sudo npm install -g yarn && sudo npm install -g pm2
-                                echo -e "skip\n" | npx create-strapi-app simple-strapi --quickstart
-                                cd simple-strapi
-                                echo "const strapi = require('@strapi/strapi');
-                                strapi().start();" > server.js
-                                pm2 start server.js --name strapi
-                                pm2 save && pm2 startup
+                                sudo git clone https://github.com/SAKETH20002/forstrapi.git
+                                cd forstrapi/
+                                cd row/
+                                sudo yarn install
+                                sudo pm2 start yarn --name "s" -- start
                                 sleep 360
                                 EOF
 
   tags = {
-    Name = "Strapi_Server"
+    Name = "Strapi_deploy"
   }
 }
