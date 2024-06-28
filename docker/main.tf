@@ -21,6 +21,7 @@ resource "aws_instance" "strapi" {
                                 cd forstrapi/
                                 docker build -t sakethmutyala/strapi_app:latest .
                                 docker run -d -p 1337:1337 --name strapi sakethmutyala/strapi_app:latest
+                                slepp 200s 
                                 EOF
 
   tags = {
