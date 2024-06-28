@@ -25,6 +25,6 @@ resource "aws_instance" "strapi" {
                                 EOF
 
   tags = {
-    Name = "Strapi_deploy"
+    Name = "deploy_on_docker"
   }
 }
