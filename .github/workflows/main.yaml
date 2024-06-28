@@ -43,6 +43,7 @@ jobs:
             terraform apply -auto-approve
             echo "done apply"
           elif [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+            terraform plan -no-color
             terraform destroy -auto-approve
           else
             echo "Invalid action specified"
