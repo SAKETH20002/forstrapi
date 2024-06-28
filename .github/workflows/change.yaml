@@ -16,21 +16,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H $INSTANCE_IP >> ~/.ssh/known_hosts
+      - name: Start SSH agent and add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ env.PRIVATE_KEY }}
 
-      - name: SSH and Deploy
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER_NAME@$INSTANCE_IP << 'EOF'
-          cd /srv/strapi/forstrapi/row
-          sudo git pull origin master
-          sudo yarn install
-          sudo pm2 restart saketh
-          EOF
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ env.INSTANCE_IP }}
+          username: ${{ env.USER_NAME }}
+          key: ${{ env.PRIVATE_KEY }}
+          script: |
+            cd /srv/strapi/forstrapi/row
+            sudo git pull origin master
+            sudo yarn install
+            sudo pm2 restart saketh
+            EOF
         env:
           INSTANCE_IP: ${{ env.INSTANCE_IP }}
           USER_NAME: ${{ env.USER_NAME }}
