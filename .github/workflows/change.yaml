@@ -34,7 +34,7 @@ jobs:
             sudo git pull origin master
             sudo yarn install
             sudo pm2 restart saketh
-            echo"done"
+            echo "done"
         env:
           INSTANCE_IP: ${{ env.INSTANCE_IP }}
           USER_NAME: ${{ env.USER_NAME }}
