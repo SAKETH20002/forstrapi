@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
 
 env:
-  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
   INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
-  USER_NAME: ${{ secrets.USER_NAME }}
+  USER_NAME: ${{ secrets.SSH_USERNAME }}
 
 jobs:
   ssh_and_deploy:
