@@ -2,20 +2,27 @@ name: Terraform
 
 on:
   workflow_dispatch:
-   
+    inputs:
+      action:
+        description: 'Specify the action to perform'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - apply
+          - destroy
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   
 jobs:
   terraform:
-    name: "Terraform"
     runs-on: self-hosted
-    env: 
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     defaults:
       run:
         working-directory: .
-    
-
+        
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,23 +30,21 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.0.11 # Specify your Terraform version here
+          terraform_version: 1.0.11
           terraform_wrapper: false
-           
-      
+
       - name: Terraform Init
-        id: init
         run: terraform init
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-
-      - name: Get Instance IP
-        id: get_ip
-        run: echo "::set-output name=INSTANCE_IP::$(terraform output -raw instance_ip)"   
-
-     
+      - name: Terraform Action
+        run: |
+          if [ "${{ github.event.inputs.action }}" == "apply" ]; then
+            terraform plan -no-color
+            terraform apply -auto-approve
+            echo "done apply"
+          elif [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+            terraform destroy -auto-approve
+          else
+            echo "Invalid action specified"
+            exit 1
+          fi
