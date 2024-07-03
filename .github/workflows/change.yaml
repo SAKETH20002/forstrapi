@@ -12,7 +12,7 @@ env:
 
 jobs:
   ssh_and_deploy:
-    runs-on: ubuntu-latest
+    runs-on: bro
     
     steps:
       - name: Checkout code
